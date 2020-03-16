@@ -8,6 +8,7 @@ import sys
 
 # URL to acme-dns instance
 ACMEDNS_URL = "https://auth.acme-dns.io"
+ACMEDNS_CREDENTIALS = ('user', 'pass')
 # Path for acme-dns credential storage
 STORAGE_PATH = "/etc/letsencrypt/acmedns.json"
 # Whitelist for address ranges to allow the updates from
@@ -41,9 +42,11 @@ class AcmeDnsClient(object):
             # Include whitelisted networks to the registration call
             reg_data = {"allowfrom": allowfrom}
             res = requests.post(self.acmedns_url+"/register",
+                                auth=ACMEDNS_CREDENTIALS,
                                 data=json.dumps(reg_data))
         else:
-            res = requests.post(self.acmedns_url+"/register")
+            res = requests.post(self.acmedns_url+"/register",
+                                auth=ACMEDNS_CREDENTIALS)
         if res.status_code == 201:
             # The request was successful
             return res.json()
@@ -62,6 +65,7 @@ class AcmeDnsClient(object):
                    "Content-Type": "application/json"}
         res = requests.post(self.acmedns_url+"/update",
                             headers=headers,
+                            auth=ACMEDNS_CREDENTIALS,
                             data=json.dumps(update))
         if res.status_code == 200:
             # Successful update
