@@ -14,7 +14,7 @@ Requires Certbot >= 0.10, Python requests library.
 
 3) Download the authentication hook script and make it executable:
 ```
-$ curl -o /etc/letsencrypt/acme-dns-auth.py https://raw.githubusercontent.com/joohoi/acme-dns-certbot-joohoi/master/acme-dns-auth.py
+$ curl -o /etc/letsencrypt/acme-dns-auth.py https://raw.githubusercontent.com/anton-shestakov/acme-dns-certbot-joohoi/master/acme-dns-auth.py
 $ chmod 0700 /etc/letsencrypt/acme-dns-auth.py
 ```
 
@@ -39,7 +39,8 @@ On initial run:
 ```
 $ certbot certonly --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py \
    --preferred-challenges dns --debug-challenges                                 \
-   -d example.org -d \*.example.org
+   -d example.org --deploy-hook "service nginx restart"
+
 ```
 Note that the `--debug-challenges` is mandatory here to pause the Certbot execution before asking Let's Encrypt to validate the records and let you to manually add the CNAME records to your main DNS zone.
 
